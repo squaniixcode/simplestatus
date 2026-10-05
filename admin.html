@@ -101,6 +101,33 @@
         .btn-to-frei {
             background-color: #34c759;
         }
+
+        /* Frosted Glass Button unten zentriert */
+        .status-link {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: #1c1c1e;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .status-link:hover {
+            background: rgba(255, 255, 255, 0.85);
+            transform: translateX(-50%) scale(1.03);
+        }
     </style>
 </head>
 <body>
@@ -119,10 +146,18 @@
         </button>
     </div>
 
+    <!-- Frosted Glass Button unten -->
+    <a href="https://simplestatus-virid.vercel.app/" class="status-link">Statusseite ansehen</a>
+
     <script>
         let currentStatus = 'frei';
 
         async function fetchStatus() {
+            // Keine Anfrage senden, wenn der Bildschirm/Tab nicht aktiv sichtbar ist
+            if (document.hidden) {
+                return;
+            }
+
             try {
                 const res = await fetch('/api/get-status');
                 const data = await res.json();
@@ -172,8 +207,15 @@
             }
         }
 
+        // Sofort abfragen, wenn das Display wieder eingeschaltet oder die Seite geöffnet wird
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                fetchStatus();
+            }
+        });
+
         fetchStatus();
-        setInterval(fetchStatus, 3000);
+        setInterval(fetchStatus, 10000); // Alle 10 Sekunden abfragen
     </script>
 </body>
 </html>

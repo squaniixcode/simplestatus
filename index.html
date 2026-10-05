@@ -24,6 +24,36 @@
             transition: background-color 0.8s cubic-bezier(0.16, 1, 0.3, 1);
             padding: 20px;
         }
+
+        /* Frosted Glass Logo Platte oben zentriert */
+        .logo-header {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 12px 28px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-header .logo {
+            height: 4.5rem;
+            width: auto;
+            max-width: 80vw;
+            object-fit: contain;
+            display: block;
+        }
+
         .bg-frei {
             background-color: #34c759;
         }
@@ -61,6 +91,11 @@
     </style>
 </head>
 <body id="main-body" class="bg-loading">
+
+    <!-- Frosted Glass Logo-Platte oben am Bildschirmrand -->
+    <div class="logo-header">
+        <img src="./logo.png" alt="Logo" class="logo">
+    </div>
 
     <div class="status-box">
         <h1 id="status-title">LADE...</h1>

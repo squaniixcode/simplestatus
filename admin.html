@@ -24,15 +24,16 @@
             padding: 24px;
             color: #1c1c1e;
 
-            /* Hintergrundbild Einbindung */
-            background-image: url('hintergrund.jpg');
+            /* Fallback-Farbe falls Bild lädt + Hintergrundbild */
+            background-color: #e5e5ea;
+            background-image: url('./hintergrund.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             background-attachment: fixed;
         }
         .card {
-            /* Leicht transparente Karte mit iOS-Frostglas-Effekt */
+            /* Transparente Karte mit Frostglas-Effekt */
             background: rgba(255, 255, 255, 0.88);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
@@ -45,10 +46,15 @@
             border: 1px solid rgba(255, 255, 255, 0.4);
         }
         .logo {
-            height: 2.2rem; /* Ungefähr so hoch wie der Text */
+            /* 3,5x größer als vorher */
+            height: 7.7rem;
             width: auto;
-            margin-bottom: 0.5rem;
+            max-width: 100%;
+            margin-bottom: 1rem;
             object-fit: contain;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
         h1 {
             font-size: 1.8rem;
@@ -104,7 +110,7 @@
 
     <div class="card">
         <!-- Logo über der Überschrift -->
-        <img src="logo.png" alt="Logo" class="logo">
+        <img src="./logo.png" alt="Logo" class="logo">
 
         <h1>Patientometer 1.0</h1>
         <div class="subtitle">by Matthias Leppert</div>

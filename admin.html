@@ -25,7 +25,7 @@
             color: #1c1c1e;
 
             /* Hintergrundbild Einbindung */
-            background-image: url('hintergrund.jpeg');
+            background-image: url('hintergrund.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -43,6 +43,12 @@
             max-width: 380px;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .logo {
+            height: 2.2rem; /* Ungefähr so hoch wie der Text */
+            width: auto;
+            margin-bottom: 0.5rem;
+            object-fit: contain;
         }
         h1 {
             font-size: 1.8rem;
@@ -97,6 +103,9 @@
 <body>
 
     <div class="card">
+        <!-- Logo über der Überschrift -->
+        <img src="logo.png" alt="Logo" class="logo">
+
         <h1>Patientometer 1.0</h1>
         <div class="subtitle">by Matthias Leppert</div>
 

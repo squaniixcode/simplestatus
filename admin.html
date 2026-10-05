@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sprechstunden-Steuerung</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f5f5f7;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        h1 { color: #333; margin-bottom: 0.5rem; text-align: center; }
+        p { color: #666; margin-bottom: 2rem; text-align: center; }
+        .status-box {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 20px;
+            background: #fff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            width: 100%;
+            max-width: 320px;
+        }
+        .btn {
+            padding: 1.2rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: transform 0.1s, opacity 0.2s;
+            color: white;
+            text-align: center;
+        }
+        .btn:active { transform: scale(0.97); }
+        .btn-frei { background-color: #34c759; }
+        .btn-besetzt { background-color: #ff3b30; }
+        .active { outline: 4px solid #000; outline-offset: 2px; }
+    </style>
+</head>
+<body>
+
+    <h1>Sprechstunden-Steuerung</h1>
+    <p>Tippe auf einen Button, um den Status sofort umzuschalten.</p>
+
+    <div class="status-box" id="current-status">Lade Status...</div>
+
+    <div class="btn-container">
+        <button class="btn btn-frei" onclick="setStatus('frei')">Frei / Bitte eintreten</button>
+        <button class="btn btn-besetzt" onclick="setStatus('besetzt')">Besetzt / Bitte warten</button>
+    </div>
+
+    <script>
+        async function fetchStatus() {
+            try {
+                const res = await fetch('/api/get-status');
+                const data = await res.json();
+                const statusEl = document.getElementById('current-status');
+                if (data.status === 'frei') {
+                    statusEl.innerText = 'Aktueller Status: FREI';
+                    statusEl.style.color = '#34c759';
+                } else {
+                    statusEl.innerText = 'Aktueller Status: BESETZT';
+                    statusEl.style.color = '#ff3b30';
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function setStatus(newStatus) {
+            try {
+                document.getElementById('current-status').innerText = 'Wird aktualisiert...';
+                await fetch('/api/set-status', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: newStatus })
+                });
+                fetchStatus();
+            } catch (err) {
+                alert('Fehler beim Speichern');
+                fetchStatus();
+            }
+        }
+
+        fetchStatus();
+    </script>
+</body>
+</html>

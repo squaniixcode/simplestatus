@@ -104,6 +104,11 @@
 
     <script>
         async function checkStatus() {
+            // Keine Anfrage senden, wenn der Bildschirm/Tab nicht aktiv sichtbar ist
+            if (document.hidden) {
+                return;
+            }
+
             try {
                 const res = await fetch('/api/get-status');
                 const data = await res.json();
@@ -126,8 +131,15 @@
             }
         }
 
+        // Sofort abfragen, wenn das Display wieder eingeschaltet oder die Seite geöffnet wird
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                checkStatus();
+            }
+        });
+
         checkStatus();
-        setInterval(checkStatus, 3000);
+        setInterval(checkStatus, 10000); // Alle 10 Sekunden abfragen
     </script>
 </body>
 </html>

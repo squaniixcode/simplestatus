@@ -54,6 +54,33 @@
             display: block;
         }
 
+        /* Frosted Glass Button unten zentriert */
+        .admin-link {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: white;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .admin-link:hover {
+            background: rgba(255, 255, 255, 0.35);
+            transform: translateX(-50%) scale(1.03);
+        }
+
         .bg-frei {
             background-color: #34c759;
         }
@@ -101,6 +128,9 @@
         <h1 id="status-title">LADE...</h1>
         <p id="status-text">Verbindung wird aufgebaut</p>
     </div>
+
+    <!-- Frosted Glass Button unten -->
+    <a href="https://simplestatus-virid.vercel.app/admin.html" class="admin-link">Status falsch?</a>
 
     <script>
         async function checkStatus() {

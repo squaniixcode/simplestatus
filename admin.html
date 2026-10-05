@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Status Anzeige</title>
     
-    <!-- PWA & Home-Screen Optimierung -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Status">
@@ -33,7 +32,6 @@
             width: 100%;
             max-width: 380px;
             text-align: center;
-            transition: transform 0.3s ease;
         }
         h1 {
             font-size: 1.8rem;
@@ -56,51 +54,32 @@
             padding: 0.7rem 1.4rem;
             border-radius: 30px;
             margin-bottom: 2rem;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.3s ease;
         }
-        .status-frei {
-            background-color: #e4f9e8;
-            color: #248a3d;
-        }
-        .status-besetzt {
-            background-color: #fde8e8;
-            color: #d70015;
-        }
-        .status-loading {
-            background-color: #e5e5ea;
-            color: #8e8e93;
-        }
-        .btn-group {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-        .btn {
-            padding: 1.2rem;
-            font-size: 1.1rem;
-            font-weight: 600;
+        .status-frei { background-color: #e4f9e8; color: #248a3d; }
+        .status-besetzt { background-color: #fde8e8; color: #d70015; }
+        .status-loading { background-color: #e5e5ea; color: #8e8e93; }
+
+        .toggle-btn {
+            width: 100%;
+            padding: 1.5rem 1rem;
+            font-size: 1.2rem;
+            font-weight: 700;
             border: none;
-            border-radius: 16px;
+            border-radius: 18px;
             cursor: pointer;
             transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             color: white;
-            opacity: 0.4;
-            transform: scale(0.98);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
-        .btn:active {
-            transform: scale(0.95) !important;
+        .toggle-btn:active {
+            transform: scale(0.96);
         }
-        .btn-frei {
-            background-color: #34c759;
-        }
-        .btn-besetzt {
+        .btn-to-besetzt {
             background-color: #ff3b30;
         }
-        /* Hervorhebung & Animation des aktiven Status */
-        .btn.active {
-            opacity: 1;
-            transform: scale(1);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        .btn-to-frei {
+            background-color: #34c759;
         }
     </style>
 </head>
@@ -112,18 +91,20 @@
 
         <div id="status-badge" class="status-badge status-loading">Lade Status...</div>
 
-        <div class="btn-group">
-            <button id="btn-frei" class="btn btn-frei" onclick="setStatus('frei')">🟢 Frei</button>
-            <button id="btn-besetzt" class="btn btn-besetzt" onclick="setStatus('besetzt')">🔴 Patient vorhanden</button>
-        </div>
+        <button id="toggle-btn" class="toggle-btn btn-to-besetzt" onclick="toggleStatus()">
+            Wird geladen...
+        </button>
     </div>
 
     <script>
+        let currentStatus = 'frei';
+
         async function fetchStatus() {
             try {
                 const res = await fetch('/api/get-status');
                 const data = await res.json();
-                updateUI(data.status);
+                currentStatus = data.status;
+                updateUI(currentStatus);
             } catch (err) {
                 console.error(err);
             }
@@ -131,23 +112,26 @@
 
         function updateUI(status) {
             const badge = document.getElementById('status-badge');
-            const btnFrei = document.getElementById('btn-frei');
-            const btnBesetzt = document.getElementById('btn-besetzt');
+            const btn = document.getElementById('toggle-btn');
 
             if (status === 'frei') {
                 badge.innerText = 'Aktuell: FREI';
                 badge.className = 'status-badge status-frei';
-                btnFrei.classList.add('active');
-                btnBesetzt.classList.remove('active');
+                
+                btn.innerText = '🔴 Auf "Patient vorhanden" schalten';
+                btn.className = 'toggle-btn btn-to-besetzt';
             } else {
                 badge.innerText = 'Aktuell: PATIENT VORHANDEN';
                 badge.className = 'status-badge status-besetzt';
-                btnBesetzt.classList.add('active');
-                btnFrei.classList.remove('active');
+                
+                btn.innerText = '🟢 Auf "Frei" schalten';
+                btn.className = 'toggle-btn btn-to-frei';
             }
         }
 
-        async function setStatus(newStatus) {
+        async function toggleStatus() {
+            const nextStatus = (currentStatus === 'frei') ? 'besetzt' : 'frei';
+            
             const badge = document.getElementById('status-badge');
             badge.innerText = 'Speichere...';
             badge.className = 'status-badge status-loading';
@@ -156,7 +140,7 @@
                 await fetch('/api/set-status', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ status: newStatus })
+                    body: JSON.stringify({ status: nextStatus })
                 });
                 fetchStatus();
             } catch (err) {

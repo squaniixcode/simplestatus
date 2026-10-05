@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Status Anzeige</title>
+    
+    <!-- PWA & Home-Screen Optimierung -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Status">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚙️</text></svg>">
+
+    <style>
+        * { box-sizing: border-box; touch-action: manipulation; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f2f2f7;
+            padding: 24px;
+            color: #1c1c1e;
+        }
+        .card {
+            background: #ffffff;
+            padding: 2.5rem 2rem;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        h1 {
+            font-size: 1.8rem;
+            margin: 0 0 0.2rem 0;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .subtitle {
+            color: #8e8e93;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin: 0 0 2rem 0;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+        .status-badge {
+            display: inline-block;
+            font-size: 1.05rem;
+            font-weight: 600;
+            padding: 0.7rem 1.4rem;
+            border-radius: 30px;
+            margin-bottom: 2rem;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .status-frei {
+            background-color: #e4f9e8;
+            color: #248a3d;
+        }
+        .status-besetzt {
+            background-color: #fde8e8;
+            color: #d70015;
+        }
+        .status-loading {
+            background-color: #e5e5ea;
+            color: #8e8e93;
+        }
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .btn {
+            padding: 1.2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            color: white;
+            opacity: 0.4;
+            transform: scale(0.98);
+        }
+        .btn:active {
+            transform: scale(0.95) !important;
+        }
+        .btn-frei {
+            background-color: #34c759;
+        }
+        .btn-besetzt {
+            background-color: #ff3b30;
+        }
+        /* Hervorhebung & Animation des aktiven Status */
+        .btn.active {
+            opacity: 1;
+            transform: scale(1);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>Status Anzeige</h1>
+        <div class="subtitle">by Matthias Leppert</div>
+
+        <div id="status-badge" class="status-badge status-loading">Lade Status...</div>
+
+        <div class="btn-group">
+            <button id="btn-frei" class="btn btn-frei" onclick="setStatus('frei')">🟢 Frei</button>
+            <button id="btn-besetzt" class="btn btn-besetzt" onclick="setStatus('besetzt')">🔴 Patient vorhanden</button>
+        </div>
+    </div>
+
+    <script>
+        async function fetchStatus() {
+            try {
+                const res = await fetch('/api/get-status');
+                const data = await res.json();
+                updateUI(data.status);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function updateUI(status) {
+            const badge = document.getElementById('status-badge');
+            const btnFrei = document.getElementById('btn-frei');
+            const btnBesetzt = document.getElementById('btn-besetzt');
+
+            if (status === 'frei') {
+                badge.innerText = 'Aktuell: FREI';
+                badge.className = 'status-badge status-frei';
+                btnFrei.classList.add('active');
+                btnBesetzt.classList.remove('active');
+            } else {
+                badge.innerText = 'Aktuell: PATIENT VORHANDEN';
+                badge.className = 'status-badge status-besetzt';
+                btnBesetzt.classList.add('active');
+                btnFrei.classList.remove('active');
+            }
+        }
+
+        async function setStatus(newStatus) {
+            const badge = document.getElementById('status-badge');
+            badge.innerText = 'Speichere...';
+            badge.className = 'status-badge status-loading';
+            
+            try {
+                await fetch('/api/set-status', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: newStatus })
+                });
+                fetchStatus();
+            } catch (err) {
+                alert('Fehler beim Speichern');
+                fetchStatus();
+            }
+        }
+
+        fetchStatus();
+        setInterval(fetchStatus, 3000);
+    </script>
+</body>
+</html>

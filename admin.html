@@ -12,27 +12,37 @@
 
     <style>
         * { box-sizing: border-box; touch-action: manipulation; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            background-color: #f2f2f7;
-            padding: 24px;
-            color: #1c1c1e;
-        }
-        .card {
-            background: #ffffff;
-            padding: 2.5rem 2rem;
-            border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            width: 100%;
-            max-width: 380px;
-            text-align: center;
-        }
+       body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 24px;
+    color: #1c1c1e;
+
+    /* Hintergrundbild einbinden */
+    background-image: url('hintergrund.jpg');
+    background-size: cover;          /* Blesst das Bild auf den ganzen Bildschirm */
+    background-position: center;     /* Zentriert das Bild */
+    background-repeat: no-repeat;    /* Verhindert Kacheln */
+    background-attachment: fixed;    /* Fixiert das Bild beim Scrollen */
+}
+
+/* Optional: Die Karte leicht transparent machen (Glassmorphism) */
+.card {
+    background: rgba(255, 255, 255, 0.85); /* 85% weiß */
+    backdrop-filter: blur(12px);            /* Weichzeichner dahinter */
+    -webkit-backdrop-filter: blur(12px);
+    padding: 2.5rem 2rem;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+}
         h1 {
             font-size: 1.8rem;
             margin: 0 0 0.2rem 0;

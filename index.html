@@ -79,12 +79,12 @@
 
                 if (data.status === 'frei') {
                     body.className = 'bg-frei';
-                    title.innerText = 'FREI';
-                    text.innerText = 'Bitte eintreten';
+                    title.innerText = 'Keine Patienten anwesend.';
+                    text.innerText = 'Die Praxis ist frei.';
                 } else {
                     body.className = 'bg-besetzt';
-                    title.innerText = 'PATIENT VORHANDEN';
-                    text.innerText = 'Bitte warten';
+                    title.innerText = 'PATIENT*IN ANWESEND';
+                    text.innerText = 'Bitte leise sein!';
                 }
             } catch (err) {
                 console.error(err);

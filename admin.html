@@ -86,7 +86,7 @@
 <body>
 
     <div class="card">
-        <h1>Status Anzeige</h1>
+        <h1>Patientometer 1.0</h1>
         <div class="subtitle">by Matthias Leppert</div>
 
         <div id="status-badge" class="status-badge status-loading">Lade Status...</div>
@@ -118,13 +118,13 @@
                 badge.innerText = 'Aktuell: FREI';
                 badge.className = 'status-badge status-frei';
                 
-                btn.innerText = '🔴 Auf "Patient vorhanden" schalten';
+                btn.innerText = 'Patienten anwesend';
                 btn.className = 'toggle-btn btn-to-besetzt';
             } else {
                 badge.innerText = 'Aktuell: PATIENT VORHANDEN';
                 badge.className = 'status-badge status-besetzt';
                 
-                btn.innerText = '🟢 Auf "Frei" schalten';
+                btn.innerText = 'Keine Patienten mehr anwesend';
                 btn.className = 'toggle-btn btn-to-frei';
             }
         }

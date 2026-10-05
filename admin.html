@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Status Anzeige</title>
     
-    <!-- PWA & Home-Screen Optimierung -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Status">
@@ -24,9 +23,9 @@
             padding: 24px;
             color: #1c1c1e;
 
-            /* Fallback-Farbe falls Bild lädt + Hintergrundbild */
+            /* Hintergrundbild & Fallback */
             background-color: #e5e5ea;
-            background-image: url('hintergrund.jpg');
+            background-image: url('./hintergrund.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -46,15 +45,13 @@
             border: 1px solid rgba(255, 255, 255, 0.4);
         }
         .logo {
-            /* 3,5x größer als vorher */
+            /* 3,5x vergrößert im Vergleich zum Ursprungstext */
             height: 7.7rem;
             width: auto;
             max-width: 100%;
-            margin-bottom: 1rem;
+            margin: 0 auto 1rem auto;
             object-fit: contain;
             display: block;
-            margin-left: auto;
-            margin-right: auto;
         }
         h1 {
             font-size: 1.8rem;
